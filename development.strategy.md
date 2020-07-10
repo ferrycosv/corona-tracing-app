@@ -24,5 +24,3 @@
 | As a user|  can see the latest info about the Coronavirus|so that I am informed.|
  |As a user |I will be able to track  the Corona virus spread around me|so that I can be more cautious. 
 |
-
-
