@@ -9,11 +9,11 @@ class App extends Component {
   render() {
     return (
       <div>
-        <ul>
+        {/* <ul>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/secret">Secret</Link></li>
           <li><Link to="/login">Login</Link></li>
-        </ul>
+        </ul> */}
 
         <Switch>
           <Route path="/" exact component={Home} />
