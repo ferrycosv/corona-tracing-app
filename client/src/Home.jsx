@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './home/home.module.css';
 
 export default class Home extends Component {
   constructor() {
@@ -8,17 +9,12 @@ export default class Home extends Component {
     }
   }
   
-  componentDidMount() {
-    fetch('/api/home')
-      .then(res => res.text())
-      .then(res => this.setState({message: res}));
-  }
+ 
   
   render() {
     return (
-      <div>
-        <h1>Home</h1>
-        <p>{this.state.message}</p>
+      <div className={styles.container}>
+        <h1>home component</h1>     
       </div>
     );
   }
