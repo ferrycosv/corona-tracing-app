@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
+import ListingComponent from './Listing';
+import styles from './dashboard.module.css';
 
 export default function withAuth(ComponentToProtect) {
     return class extends Component {
@@ -23,7 +25,9 @@ export default function withAuth(ComponentToProtect) {
                 })
                 .catch(err => {
                     console.error(err);
-                    this.setState({ loading: false, redirect: true });
+                    //ignore redirect and load the page... when the jwt token enpoint created should be set to;
+                    //this.setState({ loading: false, redirect: true });
+                    this.setState({ loading: false, redirect: false });
                 });
         }
 
@@ -37,9 +41,18 @@ export default function withAuth(ComponentToProtect) {
                 return <Redirect to="/login" />;
             }
             return (
-               <div>secured dashboard</div>
 
-      );
+                <div className={[styles.container, styles.border].join(" ")}>
+
+                    <div className={[styles.leftSideBar, styles.border].join(" ")}>LeftSidebar</div>
+                    <div className={[styles.rightSideBar, styles.border].join(" ")}>
+                        <ListingComponent></ListingComponent>
+                    </div>
+                </div>
+
+
+
+            );
 
 
         }

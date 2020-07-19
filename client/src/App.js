@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import withAuth from './withAuth';
-import Home from './Home';
+import Home from './home/Home';
 import Secret from './Secret';
 import Login from './Login';
+import Dashboard from './dashboard/DashBoard'
 
 class App extends Component {
   render() {
@@ -11,7 +12,7 @@ class App extends Component {
       <div>
             <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/secret" component={withAuth(Secret)} />
+          <Route path="/dashboard" component={Dashboard(Secret)} />
           <Route path="/login" component={Login} />
         </Switch>
       </div>
