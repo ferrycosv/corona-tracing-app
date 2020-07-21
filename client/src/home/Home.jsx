@@ -19,6 +19,10 @@ export default class Home extends Component {
       <div className={[styles.container, styles.border].join(" ")}>
         <div className={styles.topContainer}>
           <div>picture</div>
+          <div class='track'> 
+          <h1 class='track-text-1'>Track your Corona state</h1>
+          <p> Creat your own list, save time</p>
+          </div>
           <div className={styles.loginRegisterTab}>register and login
           <LoginComponent></LoginComponent>
             <RegisterComponent></RegisterComponent>
