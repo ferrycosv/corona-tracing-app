@@ -19,8 +19,8 @@ app.get('/secret', withAuth, function(req, res) {
 });
 
 app.post('/register', function(req, res) {
-  const { email, password } = req.body;
-  const user = new User({ email, password });
+  const { email, password, firstName, lastName } = req.body;
+  const user = new User({ email, password, firstName, lastName });
   user.save(function(err) {
     if (err) {
       console.log(err);

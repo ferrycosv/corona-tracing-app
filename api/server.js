@@ -6,7 +6,7 @@ const mongoose = require('./db/mongoose.js')
 
 const app = express();
 
-const secret = 'mysecretsshhh';
+//const secret = 'mysecretsshhh';
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -18,6 +18,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/home.js'));
 app.use('/', require('./routes/login.js'));
-app.use('/', require('./routes/test.js'));
+//app.use('/', require('./routes/test.js'));
 
 module.exports = app;
