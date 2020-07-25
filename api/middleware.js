@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const secret = 'mysecretsshhh';
+const secret = 'mysecretsshhh'; //read from file
 
 const withAuth = function(req, res, next) {
   const token = 
