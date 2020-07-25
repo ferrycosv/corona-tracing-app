@@ -23,14 +23,13 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre("save", function (next) {
-  if (this.isNew || this.isModified("password")) {
+  if (this.isNew) {
     const document = this;
     bcrypt.hash(this.password, saltRounds, function (err, hashedPassword) {
       if (err) {
         next(err);
       } else {
         document.password = hashedPassword;
-        if (!document.isNew) document.lastUpdate = Date.now;
         next();
       }
     });

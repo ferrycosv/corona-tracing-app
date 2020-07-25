@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [{
+        "label": "react",
+        "command": "npm run-script start",
+        "type": "shell",
+        "options": {
+            "cwd": "${workspaceFolder}/client/"
+        }
+    }]
+}
