@@ -55,7 +55,7 @@ const controllers = {
             res
               .cookie("token", token, { httpOnly: true })
               .status(200)
-              .json({ status: "success" });
+              .json({ status: "success", token: token });
           }
         });
       }
