@@ -5,6 +5,8 @@ import Home from './home/Home';
 import Secret from './Secret';
 import Login from './Login';
 import Dashboard from './dashboard/DashBoard'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'antd/dist/antd.css';
 
 class App extends Component {
   render() {
