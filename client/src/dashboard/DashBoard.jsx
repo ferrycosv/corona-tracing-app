@@ -4,6 +4,7 @@ import ListingComponent from './Listing';
 import styles from './dashboard.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faSpinner, faUserCircle, faHome } from '@fortawesome/free-solid-svg-icons'
+import variables from './../env.variables'
 
 
 export default function withAuth(ComponentToProtect) {
@@ -17,7 +18,7 @@ export default function withAuth(ComponentToProtect) {
         }
 
         componentDidMount() {
-            fetch('/api/checkToken')
+            fetch(`${variables.backend}api/users/checkToken`)
                 .then(res => {
                     if (res.status === 200) {
                         this.setState({ loading: false });
