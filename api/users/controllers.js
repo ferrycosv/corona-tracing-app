@@ -12,11 +12,12 @@ const controllers = {
     user.save(function (err) {
       if (err) {
         console.log(err);
-        res.status(500).send("Error registering new user please try again.");
+        res
+          .status(500)
+          .json({ error: "Error registering new user please try again..." });
       } else {
         res.status(200).json({
           email: email,
-          password: password,
           firstName: firstName,
           lastName: lastName,
         });
