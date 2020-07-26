@@ -45,9 +45,9 @@ export default function withAuth(ComponentToProtect) {
             }
             return (
 
-                <div className={[styles.container, styles.border].join(" ")}>
+                <div className={styles.container}>
 
-                    <div className={[styles.leftSideBar, styles.border, styles.center].join(" ")}>
+                    <div className={[styles.leftSideBar, styles.center].join(" ")}>
                         <div className="text-center text-light mb-3"><FontAwesomeIcon icon={faUserCircle} size="6x" /></div>
                         <div className={styles.leftlinks}>
                             <span><FontAwesomeIcon icon={faHome} size="1x" /></span>&nbsp;&nbsp;&nbsp;
