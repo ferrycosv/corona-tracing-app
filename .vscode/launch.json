@@ -9,8 +9,7 @@
       "request": "launch",
       "name": "Launch Program",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/index.js",
-      "preLaunchTask": "react"
+      "program": "${workspaceFolder}/index.js"
     }
   ]
 }
