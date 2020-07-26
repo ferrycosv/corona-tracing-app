@@ -18,21 +18,45 @@ export default function withAuth(ComponentToProtect) {
         }
 
         componentDidMount() {
-            fetch(`${variables.backend}api/users/checkToken`)
-                .then(res => {
-                    if (res.status === 200) {
-                        this.setState({ loading: false });
-                    } else {
-                        const error = new Error(res.error);
-                        throw error;
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    //ignore redirect and load the page... when the jwt token enpoint created should be set to;
-                    //this.setState({ loading: false, redirect: true });
-                    this.setState({ loading: false, redirect: false });
-                });
+            const url = "https://localhost:5000/api/users/checkToken";
+            const data = localStorage.getItem('token');
+            console.log(data)
+            fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            }).then(res => {
+                if (res.status === 200) {
+                    this.setState({ loading: false, redirect: true })
+                }
+                return null;
+            }
+
+
+    // fetch(`https://localhost:5000/api/users/checkToken`)
+
+    //     .then(res => {
+    //         if (res.status === 200) {
+    //             this.setState({ loading: false });
+    //         } else {
+    //             const error = new Error(res.error);
+    //             throw error;
+    //         }
+    //     })
+    //     .catch(err => {
+    //         console.error(err);
+    //         //ignore redirect and load the page... when the jwt token enpoint created should be set to;
+    //         this.setState({ loading: false, redirect: true });
+    //         this.setState({ loading: false, redirect: false });
+    //     });
         }
 
 
@@ -57,15 +81,15 @@ export default function withAuth(ComponentToProtect) {
 
                     </div>
                     <div className={styles.rightSideBar}>
-                        <div className="mt-5"><span style={{ fontSize: "16px", color: "#FFFFFF",fontWeight:600 }}>Contact List</span></div>
+                        <div className="mt-5"><span style={{ fontSize: "16px", color: "#FFFFFF", fontWeight: 600 }}>Contact List</span></div>
                         <div className="mt-4">
-                            <span className={styles.listingButtons} style={{marginRight: "10px"}}>Last Ten Days</span>
+                            <span className={styles.listingButtons} style={{ marginRight: "10px" }}>Last Ten Days</span>
                             <span className={styles.listingButtons}>Last Month</span>
                         </div>
                         <div className="w-100">
                             <ListingComponent></ListingComponent>
                         </div>
-                        
+
                     </div>
                 </div>
 
