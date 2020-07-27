@@ -19,44 +19,33 @@ export default function withAuth(ComponentToProtect) {
 
         componentDidMount() {
             const url = "https://localhost:5000/api/users/checkToken";
-            const data = localStorage.getItem('token');
+            const data = {token: localStorage.getItem('token')}
+
             console.log(data)
             fetch(url, {
-                method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
+                method: 'POST', 
+                mode: 'cors', 
+                cache: 'no-cache', 
+                credentials: 'same-origin', 
                 headers: {
                     'Content-Type': 'application/json'
-                    // 'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                redirect: 'follow', // manual, *follow, error
-                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                body: JSON.stringify(data) // body data type must match "Content-Type" header
+                redirect: 'follow', 
+                referrerPolicy: 'no-referrer', 
+                body: JSON.stringify(data)
             }).then(res => {
                 if (res.status === 200) {
-                    this.setState({ loading: false, redirect: true })
+                    this.setState({ loading: false });
                 }
-                return null;
-            }
+                else {
+                    const error = new Error(res.error);
+                    throw error;
+                }
 
-
-    // fetch(`https://localhost:5000/api/users/checkToken`)
-
-    //     .then(res => {
-    //         if (res.status === 200) {
-    //             this.setState({ loading: false });
-    //         } else {
-    //             const error = new Error(res.error);
-    //             throw error;
-    //         }
-    //     })
-    //     .catch(err => {
-    //         console.error(err);
-    //         //ignore redirect and load the page... when the jwt token enpoint created should be set to;
-    //         this.setState({ loading: false, redirect: true });
-    //         this.setState({ loading: false, redirect: false });
-    //     });
+            }).catch(err => {
+                console.error(err);
+                this.setState({ loading: false, redirect: true });
+            });
         }
 
 
