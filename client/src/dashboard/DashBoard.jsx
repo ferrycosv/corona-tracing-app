@@ -4,6 +4,7 @@ import ListingComponent from './Listing';
 import styles from './dashboard.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faSpinner, faUserCircle, faHome } from '@fortawesome/free-solid-svg-icons'
+import variables from './../env.variables'
 
 
 export default function withAuth(ComponentToProtect) {
@@ -17,21 +18,34 @@ export default function withAuth(ComponentToProtect) {
         }
 
         componentDidMount() {
-            fetch('/api/checkToken')
-                .then(res => {
-                    if (res.status === 200) {
-                        this.setState({ loading: false });
-                    } else {
-                        const error = new Error(res.error);
-                        throw error;
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    //ignore redirect and load the page... when the jwt token enpoint created should be set to;
-                    //this.setState({ loading: false, redirect: true });
-                    this.setState({ loading: false, redirect: false });
-                });
+            const url = "https://localhost:5000/api/users/checkToken";
+            const data = {token: localStorage.getItem('token')}
+
+            console.log(data)
+            fetch(url, {
+                method: 'POST', 
+                mode: 'cors', 
+                cache: 'no-cache', 
+                credentials: 'same-origin', 
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                redirect: 'follow', 
+                referrerPolicy: 'no-referrer', 
+                body: JSON.stringify(data)
+            }).then(res => {
+                if (res.status === 200) {
+                    this.setState({ loading: false });
+                }
+                else {
+                    const error = new Error(res.error);
+                    throw error;
+                }
+
+            }).catch(err => {
+                console.error(err);
+                this.setState({ loading: false, redirect: true });
+            });
         }
 
 
@@ -41,7 +55,7 @@ export default function withAuth(ComponentToProtect) {
                 return null;
             }
             if (redirect) {
-                return <Redirect to="/login" />;
+                return <Redirect to="/home" />;
             }
             return (
 
@@ -56,15 +70,15 @@ export default function withAuth(ComponentToProtect) {
 
                     </div>
                     <div className={styles.rightSideBar}>
-                        <div className="mt-5"><span style={{ fontSize: "16px", color: "#FFFFFF",fontWeight:600 }}>Contact List</span></div>
+                        <div className="mt-5"><span style={{ fontSize: "16px", color: "#FFFFFF", fontWeight: 600 }}>Contact List</span></div>
                         <div className="mt-4">
-                            <span className={styles.listingButtons} style={{marginRight: "10px"}}>Last Ten Days</span>
+                            <span className={styles.listingButtons} style={{ marginRight: "10px" }}>Last Ten Days</span>
                             <span className={styles.listingButtons}>Last Month</span>
                         </div>
                         <div className="w-100">
                             <ListingComponent></ListingComponent>
                         </div>
-                        
+
                     </div>
                 </div>
 
