@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import styles from './login.module.css';
 
@@ -12,7 +12,7 @@ export default class LoginComponent extends Component {
   }
 
   handleInputChange = (event) => {
-    const {value, name} = event.target;
+    const { value, name } = event.target;
     this.setState({
       [name]: value
     });
@@ -36,14 +36,15 @@ export default class LoginComponent extends Component {
         throw error;
       }
     })
-    .catch(err => {
-      console.error(err);
-      alert('Error logging in please try again');
-    })
-    .then(res => {
-      console.log(res)
-      localStorage.setItem('token',res.token)
-    });
+      .catch(err => {
+        console.error(err);
+        alert('Error logging in please try again');
+      })
+      .then(res => {
+        console.log(res)
+        localStorage.setItem('token', res.token)
+      });
+  }
 
   onLoginClick = (event) => {
     event.preventDefault();
@@ -91,7 +92,7 @@ export default class LoginComponent extends Component {
           </section>
         </section>
 
-        <input className={styles.submitInput} type="submit" value="Login"/>
+        <input className={styles.submitInput} type="submit" value="Login" />
       </>
     );
 
@@ -162,7 +163,7 @@ export default class LoginComponent extends Component {
             />
           </section>
 
-          <input className={styles.submitInput} type="submit" value="Register"/>
+          <input className={styles.submitInput} type="submit" value="Register" />
         </>
       )
     }
