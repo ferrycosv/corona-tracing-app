@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Redirect } from 'react-router-dom';  
 import styles from './login.module.css';
 
 export default class LoginComponent extends Component {
@@ -7,7 +7,8 @@ export default class LoginComponent extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      redirect: false
     };
   }
 
@@ -42,7 +43,9 @@ export default class LoginComponent extends Component {
       })
       .then(res => {
         console.log(res)
-        localStorage.setItem('token', res.token)
+        localStorage.setItem('token', res.token);
+        this.setState({redirect : true})
+
       });
   }
 
@@ -64,6 +67,10 @@ export default class LoginComponent extends Component {
   }
 
   render() {
+    const { redirect } = this.state;
+    if(redirect){
+      return <Redirect to="/dashboard" />;
+    }
     let $form = (
       <>
         <section>
