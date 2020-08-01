@@ -1,35 +1,56 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';  
+import { Redirect } from 'react-router-dom';
 import styles from './login.module.css';
 
 export default class LoginComponent extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      email: '',
-      password: '',
+      login: {
+        email: '',
+        password: ''
+      },
+      register: {
+        email: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        confirmPassword: ''
+      },
+      isRegisterSubmitted: false,
       redirect: false
     };
   }
 
-  handleInputChange = (event) => {
+
+  handleLoginInputChange = (event) => {
     const { value, name } = event.target;
     this.setState({
-      [name]: value
-    });
+      login: { ...this.state.login, [name]: value }
+    }
+    );
   }
 
-  onSubmit = (event) => {
+  handleRegisterInputChange = (event) => {
+
+    const { value, name } = event.target;
+    this.setState({
+      register: { ...this.state.register, [name]: value }
+    }
+    );
+  }
+
+  handleLoginSubmitClick = (event) => {
     event.preventDefault();
+    event.stopPropagation();
     fetch('https://localhost:5000/api/users/authenticate', {
       method: 'POST',
-      body: JSON.stringify(this.state),
+      body: JSON.stringify(this.state.login),
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(res => {
       if (res.status === 200) {
-        console.log(res.body)
         return res.json()
         //this.props.history.push('/');
       } else {
@@ -42,12 +63,45 @@ export default class LoginComponent extends Component {
         alert('Error logging in please try again');
       })
       .then(res => {
-        console.log(res)
         localStorage.setItem('token', res.token);
-        this.setState({redirect : true})
+        this.setState({ redirect: true })
 
       });
   }
+
+  handleRegisterSubmitClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    fetch('https://localhost:5000/api/users/register', {
+      method: 'POST',
+      body: JSON.stringify(this.state.register),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      if (res.status === 200) {
+        return res.json()
+      } else {
+        const error = new Error(res.error);
+        throw error;
+      }
+    })
+      .catch(err => {
+        console.error(err);
+        alert('Error logging in please try again');
+      })
+      .then(res => {
+        this.setState({ isRegisterSubmitted: true })
+
+      });
+  }
+
+
+  // onSubmit = (event) => {
+  //   event.preventDefault();
+
+
+  // }
 
   onLoginClick = (event) => {
     event.preventDefault();
@@ -68,11 +122,15 @@ export default class LoginComponent extends Component {
 
   render() {
     const { redirect } = this.state;
-    if(redirect){
+    const {isRegisterSubmitted} = this.state;
+    if (redirect) {
       return <Redirect to="/dashboard" />;
     }
+    if(isRegisterSubmitted){
+      return <Redirect to="/" />;
+    } 
     let $form = (
-      <>
+      <form onSubmit={this.handleLoginSubmitClick}>
         <section>
           <section className={styles.loginField}>
             <label htmlFor="email">Email Address</label>
@@ -80,8 +138,7 @@ export default class LoginComponent extends Component {
               id="email"
               type="email"
               name="email"
-              value={this.state.email}
-              onChange={this.handleInputChange}
+              onChange={this.handleLoginInputChange}
               required
             />
           </section>
@@ -92,29 +149,31 @@ export default class LoginComponent extends Component {
               id="password"
               type="password"
               name="password"
-              value={this.state.password}
-              onChange={this.handleInputChange}
+              onChange={this.handleLoginInputChange}
               required
             />
           </section>
         </section>
 
-        <input className={styles.submitInput} type="submit" value="Login" />
-      </>
+        <input
+          className={styles.submitInput}
+          type="submit"
+          value="Login"
+        />
+      </form>
     );
 
     if (this.state.form === 'register') {
       $form = (
-        <>
+        <form onSubmit={this.handleRegisterSubmitClick}>
           <section>
             <section className={styles.loginField}>
               <label htmlFor="firstname">First name</label>
               <input
-                id="firstname"
+                id="firstName"
                 type="text"
-                name="firstname"
-                value={this.state.firstname}
-                onChange={this.handleInputChange}
+                name="firstName"
+                onChange={this.handleRegisterInputChange}
                 required
               />
             </section>
@@ -122,13 +181,12 @@ export default class LoginComponent extends Component {
 
           <section>
             <section className={styles.loginField}>
-              <label htmlFor="lastname">Last name</label>
+              <label htmlFor="lastName">Last name</label>
               <input
-                id="lastname"
+                id="lastName"
                 type="text"
-                name="lastname"
-                value={this.state.lastname}
-                onChange={this.handleInputChange}
+                name="lastName"
+                onChange={this.handleRegisterInputChange}
                 required
               />
             </section>
@@ -140,8 +198,7 @@ export default class LoginComponent extends Component {
               id="email"
               type="email"
               name="email"
-              value={this.state.email}
-              onChange={this.handleInputChange}
+              onChange={this.handleRegisterInputChange}
               required
             />
           </section>
@@ -152,39 +209,36 @@ export default class LoginComponent extends Component {
               id="password"
               type="password"
               name="password"
-              value={this.state.password}
-              onChange={this.handleInputChange}
+              onChange={this.handleRegisterInputChange}
               required
             />
           </section>
 
           <section className={styles.loginField}>
-            <label htmlFor="confirmpassword">Confirm Password</label>
+            <label htmlFor="confirmPassword">Confirm Password</label>
             <input
-              id="confirmpassword"
+              id="confirmPassword"
               type="password"
-              name="confirmpassword"
-              value={this.state.confirmpassword}
-              onChange={this.handleInputChange}
+              name="confirmPassword"
+              onChange={this.handleRegisterInputChange}
               required
             />
           </section>
 
           <input className={styles.submitInput} type="submit" value="Register" />
-        </>
+        </form>
       )
     }
 
     return (
-      <form onSubmit={this.onSubmit} className={styles.loginForm}>
 
+      <>
         <section className={styles.loginOptions}>
           <button onClick={this.onLoginClick} className={styles.loginButton}>Log In</button>
           <button onClick={this.onRegisterClick} className={styles.loginButton}>Register</button>
         </section>
 
         {$form}
-      </form>
-    );
+      </>);
   }
 }
