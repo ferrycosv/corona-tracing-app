@@ -116,6 +116,31 @@ const controllers = {
   checkToken: async (req, res) => {
     res.status(200).json({ status: "success" });
   },
+  addContact: async (req, res) => {
+    const { userName, contact } = req.body;
+    console.log(userName);
+    const newContact = { ...contact }
+    console.log(newContact);
+    User.findOneAndUpdate({ email: userName },
+      { $push: { contacts: newContact } },{returnOriginal: false},
+      function (err, user) {
+        console.log("updatedUser" + user)
+        if (err) {
+          console.error(err);
+          res.status(500).json({
+            error: "Internal error please try again",
+          });
+        }
+        if (res) {
+          res.status(200).json({
+            status: "success",
+          });
+        }
+
+      }
+
+    )
+  }
 };
 
 module.exports = controllers;

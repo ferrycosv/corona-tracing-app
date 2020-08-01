@@ -64,6 +64,7 @@ export default class LoginComponent extends Component {
       })
       .then(res => {
         localStorage.setItem('token', res.token);
+        localStorage.setItem('userName',this.state.login.email)
         this.setState({ redirect: true })
 
       });

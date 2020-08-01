@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Redirect,Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import ListingComponent from './Listing';
 import styles from './dashboard.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faSpinner, faUserCircle, faHome } from '@fortawesome/free-solid-svg-icons'
 import variables from './../env.variables'
 
-
+const tableColumn = {
+    width: '100px'
+  
+  }
 export default function withAuth(ComponentToProtect) {
     return class extends Component {
         constructor() {
@@ -76,6 +79,13 @@ export default function withAuth(ComponentToProtect) {
                             <span className={styles.listingButtons}>Last Month</span>
                         </div>
                         <div className="w-100">
+                            <div className="d-flex flex-row w-100 justify-content-between p-3 align-items-center mt-4" style={{ backgroundColor: "#2E2439", color: "#DFDFDF", height: "24px" }}>
+                                <div style={tableColumn}>name</div>
+                                <div style={tableColumn}>date</div>
+                                <div style={tableColumn}>location</div>
+                                <div style={tableColumn}>corona status</div>
+                                <div style={tableColumn}>edit</div>
+                            </div>
                             <ListingComponent></ListingComponent>
                         </div>
 
