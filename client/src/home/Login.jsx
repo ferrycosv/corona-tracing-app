@@ -106,7 +106,6 @@ export default class LoginComponent extends Component {
 
   onLoginClick = (event) => {
     event.preventDefault();
-
     this.setState({
       form: 'login'
     })

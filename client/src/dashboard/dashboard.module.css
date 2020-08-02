@@ -57,9 +57,9 @@
 .listingButtons {
     font-size: 14px;
     color: #FFFFFF;
-    width: 100px;
+    width: 120px;
+    text-align: center;
     background-color: #52416A;    
-    height: 20px;
-    padding: 10px;
+    padding: 5px;
     border-radius: 3px;
 }
