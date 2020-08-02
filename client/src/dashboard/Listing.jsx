@@ -21,7 +21,7 @@ export default class ListingComponent extends Component {
 
   componentDidMount() {
     const userName = localStorage.getItem('userName');
-    const url = `http://localhost:5000/api/users/${userName}/contacts`;
+    const url = `https://localhost:5000/api/users/${userName}/contacts`;
 
     fetch(url)
       .then(res => res.json())
