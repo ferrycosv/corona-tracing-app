@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Switch } from 'antd';
 
 
@@ -30,11 +30,19 @@ export default class ListingComponent extends Component {
       })
   }
 
+  handleDelete = (id,e) => {
+    console.log("id: " + id)
+  }
+
+  handleEdit = (id,e) => {
+    console.log("editID "+ id )
+  }
+
   render() {
     return (
       <>
         {this.state.contacts.map(x => {
-          return  <div className="d-flex flex-row w-100 justify-content-between p-3 align-items-center mt-4" style={{ color: "#DFDFDF", height: "24px" }}>
+          return <div key={x._id} className="d-flex flex-row w-100 justify-content-between p-3 align-items-center mt-4" style={{ color: "#DFDFDF", height: "24px" }}>
             <div style={tableColumn}>{x.fullName}</div>
             <div style={tableColumn}>{x.contactDate}</div>
             <div style={tableColumn}>{x.contactPlace}</div>
@@ -46,7 +54,15 @@ export default class ListingComponent extends Component {
                 unCheckedChildren="uninfected"
               />
             </div>
-            <div style={tableColumn}><FontAwesomeIcon icon={faEdit} size="1x" /></div>
+
+            <div style={tableColumn}>
+              <span onClick={(e) => this.handleDelete(x._id)} style={{ color: "red", marginRight: "10px", cursor: "pointer" }}>
+                <FontAwesomeIcon icon={faTrash} size="1x" />
+              </span>
+              <span onClick={(e) => this.handleEdit(x._id)} style={{ color: "white", marginRight: "10px", cursor: "pointer" }}>
+                <FontAwesomeIcon icon={faEdit} size="1x" />
+              </span>
+            </div>
           </div>
 
         }
