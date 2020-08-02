@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';  
 import styles from './login.module.css';
 
 export default class LoginComponent extends Component {
@@ -7,12 +7,13 @@ export default class LoginComponent extends Component {
     super(props)
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      redirect: false
     };
   }
 
   handleInputChange = (event) => {
-    const {value, name} = event.target;
+    const { value, name } = event.target;
     this.setState({
       [name]: value
     });
@@ -20,24 +21,31 @@ export default class LoginComponent extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    fetch('/api/authenticate', {
+    fetch('https://localhost:5000/api/users/authenticate', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
         'Content-Type': 'application/json'
       }
+    }).then(res => {
+      if (res.status === 200) {
+        console.log(res.body)
+        return res.json()
+        //this.props.history.push('/');
+      } else {
+        const error = new Error(res.error);
+        throw error;
+      }
     })
-      .then(res => {
-        if (res.status === 200) {
-          this.props.history.push('/');
-        } else {
-          const error = new Error(res.error);
-          throw error;
-        }
-      })
       .catch(err => {
         console.error(err);
         alert('Error logging in please try again');
+      })
+      .then(res => {
+        console.log(res)
+        localStorage.setItem('token', res.token);
+        this.setState({redirect : true})
+
       });
   }
 
@@ -55,9 +63,14 @@ export default class LoginComponent extends Component {
     this.setState({
       form: 'register'
     })
+
   }
 
   render() {
+    const { redirect } = this.state;
+    if(redirect){
+      return <Redirect to="/dashboard" />;
+    }
     let $form = (
       <>
         <section>
@@ -86,7 +99,7 @@ export default class LoginComponent extends Component {
           </section>
         </section>
 
-        <input className={styles.submitInput} type="submit" value="Login"/>
+        <input className={styles.submitInput} type="submit" value="Login" />
       </>
     );
 
@@ -157,7 +170,7 @@ export default class LoginComponent extends Component {
             />
           </section>
 
-          <input className={styles.submitInput} type="submit" value="Register"/>
+          <input className={styles.submitInput} type="submit" value="Register" />
         </>
       )
     }

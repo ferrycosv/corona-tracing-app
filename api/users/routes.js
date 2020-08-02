@@ -8,6 +8,6 @@ router.post("/register", controllers.register);
 router.post("/authenticate", controllers.authenticate);
 router.put("/", withAuth, controllers.updateUser);
 router.delete("/", withAuth, controllers.deleteUser);
-router.get("/checkToken", withAuth, controllers.checkToken);
+router.post("/checkToken", withAuth, controllers.checkToken);
 
 module.exports = router;
