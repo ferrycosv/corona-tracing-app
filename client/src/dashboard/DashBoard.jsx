@@ -26,7 +26,6 @@ export default function withAuth(ComponentToProtect) {
             const url = "https://localhost:5000/api/users/checkToken";
             const data = { token: localStorage.getItem('token') }
 
-            console.log(data)
             fetch(url, {
                 method: 'POST',
                 mode: 'cors',
