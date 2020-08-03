@@ -21,8 +21,12 @@ export default class Home extends Component {
           <div className={styles.titleContainer}>
             <VirusIcon className={styles.virusIcon} />
             <section>
-              <h2>Track your corona stats</h2>
+              <h2>Corona Tracking App</h2>
+              <p></p>
               <p>Create your contact list</p>
+              <p>check the number of the new infected cases everyday, world wild, and in your country</p>
+              <p>save the list of the people you have been with recently,</p>
+         
             </section>
           </div>
 
