@@ -73,36 +73,22 @@ export default class LoginComponent extends Component {
   handleRegisterSubmitClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
+
     fetch('https://localhost:5000/api/users/register', {
       method: 'POST',
       body: JSON.stringify(this.state.register),
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(res => {
-      if (res.status === 200) {
-        return res.json()
-      } else {
-        const error = new Error(res.error);
-        throw error;
-      }
     })
-      .catch(err => {
-        console.error(err);
-        alert('Error logging in please try again');
-      })
-      .then(res => {
-        this.setState({ isRegisterSubmitted: true })
-
-      });
+    .catch(err => {
+      console.error(err);
+      alert('Error while trying to register, please try again');
+    })
+    .then(res => {
+      this.setState({isRegisterSubmitted: true})
+    });
   }
-
-
-  // onSubmit = (event) => {
-  //   event.preventDefault();
-
-
-  // }
 
   onLoginClick = (event) => {
     event.preventDefault();
@@ -122,13 +108,39 @@ export default class LoginComponent extends Component {
 
   render() {
     const { redirect } = this.state;
-    const {isRegisterSubmitted} = this.state;
     if (redirect) {
       return <Redirect to="/dashboard" />;
     }
+
+    const {isRegisterSubmitted} = this.state;
     if(isRegisterSubmitted){
-      return <Redirect to="/" />;
-    } 
+      const renderLogin = (event) => {
+        event.preventDefault();
+
+        this.setState({
+          form: 'login',
+          login: {...this.state.login, email: this.state.register.email},
+          register: {
+            email: '',
+            password: '',
+            firstName: '',
+            lastName: '',
+            confirmPassword: ''
+          },
+          isRegisterSubmitted: false
+        })
+      };
+
+      return (
+        <section>
+          <p>
+            Registration completed successfully. <br />
+            <a href="#" onClick={renderLogin}>Log in</a>
+          </p>
+        </section>
+      );
+    }
+
     let $form = (
       <form onSubmit={this.handleLoginSubmitClick}>
         <section>
@@ -139,6 +151,7 @@ export default class LoginComponent extends Component {
               type="email"
               name="email"
               onChange={this.handleLoginInputChange}
+              value={this.state.login.email}
               required
             />
           </section>
