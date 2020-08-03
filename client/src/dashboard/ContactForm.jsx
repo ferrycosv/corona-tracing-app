@@ -68,6 +68,7 @@ export default class ContactForm extends Component {
             })
             .then(res => {
                 console.log("saved successfully")
+                this.props.onContactSubmitted();
             });
     }
 

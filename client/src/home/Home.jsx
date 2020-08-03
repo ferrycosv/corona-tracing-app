@@ -27,7 +27,7 @@ export default class Home extends Component {
           </div>
 
           <div className={styles.loginRegisterTab}>
-            <LoginComponent></LoginComponent>
+            <LoginComponent />
           </div>
         </div>
 

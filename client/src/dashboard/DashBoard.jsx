@@ -18,7 +18,8 @@ export default function withAuth(ComponentToProtect) {
             this.state = {
                 loading: true,
                 redirect: false,
-                contactFormToggle: false
+                contactFormToggle: false,
+                version: 0,
             };
         }
 
@@ -26,7 +27,6 @@ export default function withAuth(ComponentToProtect) {
             const url = "https://localhost:5000/api/users/checkToken";
             const data = { token: localStorage.getItem('token') }
 
-            console.log(data)
             fetch(url, {
                 method: 'POST',
                 mode: 'cors',
@@ -56,6 +56,15 @@ export default function withAuth(ComponentToProtect) {
         handleAddContactForm = event => {
             const {contactFormToggle} = this.state;
             this.setState({contactFormToggle: !contactFormToggle})
+        }
+
+        updateVersion = () => {
+            let version = this.state.version;
+            version++;
+
+            this.setState({
+                version: version
+            })
         }
 
         render() {
@@ -96,9 +105,9 @@ export default function withAuth(ComponentToProtect) {
 
                         </div>
 
-                        {this.state.contactFormToggle ? (<ContactForm></ContactForm>) : ""}
+                        {this.state.contactFormToggle ? (<ContactForm onContactSubmitted={this.updateVersion} />) : ""}
 
-                        <ListingComponent></ListingComponent>
+                        <ListingComponent key={`version_${this.state.version}`} />
 
 
                     </div>
