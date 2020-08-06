@@ -46,4 +46,6 @@
     background-color: #FCFCFC;
     border-radius: 1em;
     padding: 1em;
+    min-width: 26em;
+    min-height: 34em;
 }
