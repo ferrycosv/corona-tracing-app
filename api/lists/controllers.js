@@ -17,6 +17,8 @@ const controllers = {
         res.status(200).json({
           email: user.email,
           contacts: user.contacts,
+          firstName: user.firstName,
+          lastName: user.lastName,
         });
       }
     });
