@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import {  Route, Switch } from 'react-router-dom';
 import withAuth from './withAuth';
 import Home from './home/Home';
-import Secret from './Secret';
-import Login from './Login';
+//import Secret from './Secret';
+//import Login from './Login';
 import Dashboard from './dashboard/DashBoard'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'antd/dist/antd.css';
+
+//import 'antd/dist/antd.css';
 
 class App extends Component {
   render() {
@@ -14,8 +14,7 @@ class App extends Component {
       <div>
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route path="/dashboard" component={Dashboard(Secret)} />
-          <Route path="/login" component={Login} />
+          <Route path="/dashboard" component={withAuth(Dashboard)} />
         </Switch>
       </div>
     );

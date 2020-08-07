@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const secret = "mysecretsshhh"; //read from file
 const bcrypt = require("bcrypt");
+const path = require("path");
+const fs = require("fs");
 
 const saltRounds = 10;
+const secret = fs.readFileSync(path.resolve(__dirname, "../../secret.key"));
 
 const controllers = {
   register: (req, res) => {
@@ -12,9 +14,13 @@ const controllers = {
     user.save(function (err) {
       if (err) {
         console.log(err);
-        res
-          .status(500)
-          .json({ error: "Error registering new user please try again..." });
+        if (err.code === 11000) {
+          res.status(409).json({ error: "Email already registered!" });
+        } else {
+          res
+            .status(500)
+            .json({ error: "Error registering new user please try again..." });
+        }
       } else {
         res.status(200).json({
           email: email,
@@ -53,7 +59,7 @@ const controllers = {
               expiresIn: "1h",
             });
             res
-              .cookie("token", token, { httpOnly: true })
+              .cookie("token", token)
               .status(200)
               .json({ status: "success", token: token });
           }
@@ -115,7 +121,7 @@ const controllers = {
   },
   checkToken: async (req, res) => {
     res.status(200).json({ status: "success" });
-  }
+  },
 };
 
 module.exports = controllers;

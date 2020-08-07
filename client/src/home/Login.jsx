@@ -1,151 +1,169 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
-import styles from './login.module.css';
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import "./login.css";
+import variables from "../env_variables";
 
 export default class LoginComponent extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       login: {
-        email: '',
-        password: ''
+        email: "",
+        password: "",
       },
       register: {
-        email: '',
-        password: '',
-        firstName: '',
-        lastName: '',
-        confirmPassword: ''
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: "",
+        confirmPassword: "",
       },
-      isRegisterSubmitted: false,
-      redirect: false
+      redirect: false,
     };
   }
-
 
   handleLoginInputChange = (event) => {
     const { value, name } = event.target;
     this.setState({
-      login: { ...this.state.login, [name]: value }
-    }
-    );
-  }
+      login: { ...this.state.login, [name]: value },
+    });
+  };
 
   handleRegisterInputChange = (event) => {
-
     const { value, name } = event.target;
     this.setState({
-      register: { ...this.state.register, [name]: value }
-    }
-    );
-  }
+      register: { ...this.state.register, [name]: value },
+    });
+  };
 
-  handleLoginSubmitClick = (event) => {
+  handleLoginSubmitClick = async (event) => {
     event.preventDefault();
     event.stopPropagation();
-    fetch('https://localhost:5000/api/users/authenticate', {
-      method: 'POST',
-      body: JSON.stringify(this.state.login),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(res => {
+    try {
+      const res = await fetch(`${variables.URL_API}users/authenticate`, {
+        method: "POST",
+        body: JSON.stringify(this.state.login),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
       if (res.status === 200) {
-        return res.json()
-        //this.props.history.push('/');
+        this.setState({ redirect: true });
       } else {
-        const error = new Error(res.error);
+        const error = new Error(data.error);
         throw error;
       }
-    })
-      .catch(err => {
-        console.error(err);
-        alert('Error logging in please try again');
-      })
-      .then(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('userName',this.state.login.email)
-        this.setState({ redirect: true })
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  };
 
-      });
-  }
-
-  handleRegisterSubmitClick = (event) => {
+  handleRegisterSubmitClick = async (event) => {
     event.preventDefault();
     event.stopPropagation();
-
-    fetch('https://localhost:5000/api/users/register', {
-      method: 'POST',
-      body: JSON.stringify(this.state.register),
-      headers: {
-        'Content-Type': 'application/json'
+    if (this.state.register.password !== this.state.register.confirmPassword) {
+      alert("The password and confirmation password do not match...");
+      return;
+    } else if (this.state.register.password.length < 4) {
+      alert("The password must contain at least 4 characters...");
+      return;
+    }
+    try {
+      const res = await fetch(`${variables.URL_API}users/register`, {
+        method: "POST",
+        body: JSON.stringify(this.state.register),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (res.status === 200) {
+        this.setState({
+          form: "login",
+          login: { ...this.state.login, email: this.state.register.email },
+          register: {
+            email: "",
+            password: "",
+            firstName: "",
+            lastName: "",
+            confirmPassword: "",
+          },
+        });
+        alert("New user registered successfully! You can now login :)");
+      } else {
+        const error = new Error(data.error);
+        throw error;
       }
-    })
-    .catch(err => {
+    } catch (err) {
       console.error(err);
-      alert('Error while trying to register, please try again');
-    })
-    .then(res => {
-      this.setState({isRegisterSubmitted: true})
-    });
-  }
+      alert(err.message);
+    }
+    /*.catch((err) => {
+        console.error(err);
+        alert("Error while trying to register, please try again");
+      })
+      .then((res) => {
+        this.setState({ isRegisterSubmitted: true });
+      });*/
+  };
 
   onLoginClick = (event) => {
     event.preventDefault();
     this.setState({
-      form: 'login'
-    })
-  }
+      form: "login",
+    });
+  };
 
   onRegisterClick = (event) => {
     event.preventDefault();
-
     this.setState({
-      form: 'register'
-    })
-
-  }
+      form: "register",
+    });
+  };
 
   render() {
     const { redirect } = this.state;
     if (redirect) {
       return <Redirect to="/dashboard" />;
     }
-
-    const {isRegisterSubmitted} = this.state;
-    if(isRegisterSubmitted){
-      const renderLogin = (event) => {
-        event.preventDefault();
-
-        this.setState({
-          form: 'login',
-          login: {...this.state.login, email: this.state.register.email},
-          register: {
-            email: '',
-            password: '',
-            firstName: '',
-            lastName: '',
-            confirmPassword: ''
-          },
-          isRegisterSubmitted: false
-        })
-      };
-
+    /*const { isRegisterSubmitted } = this.state;
+    if (isRegisterSubmitted) {
+      //const renderLogin = (event) => {
+      event.preventDefault();
+      this.setState({
+        form: "login",
+        login: { ...this.state.login, email: this.state.register.email },
+        register: {
+          email: "",
+          password: "",
+          firstName: "",
+          lastName: "",
+          confirmPassword: "",
+        },
+        isRegisterSubmitted: false,
+      });
+    }
+    /*
       return (
         <section>
           <p>
             Registration completed successfully. <br />
-            <a href="#" onClick={renderLogin}>Log in</a>
+            <a href="#" onClick={renderLogin}>
+              Log in
+            </a>
           </p>
         </section>
       );
-    }
+    }*/
 
     let $form = (
       <form onSubmit={this.handleLoginSubmitClick}>
         <section>
-          <section className={styles.loginField}>
-            <label htmlFor="email">Email Address</label>
+          <section className="loginField">
+            <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
@@ -156,7 +174,7 @@ export default class LoginComponent extends Component {
             />
           </section>
 
-          <section className={styles.loginField}>
+          <section className="loginField">
             <label htmlFor="password">Password</label>
             <input
               id="password"
@@ -168,20 +186,16 @@ export default class LoginComponent extends Component {
           </section>
         </section>
 
-        <input
-          className={styles.submitInput}
-          type="submit"
-          value="Login"
-        />
+        <input className="submitInput" type="submit" value="Login" />
       </form>
     );
 
-    if (this.state.form === 'register') {
+    if (this.state.form === "register") {
       $form = (
         <form onSubmit={this.handleRegisterSubmitClick}>
           <section>
-            <section className={styles.loginField}>
-              <label htmlFor="firstname">First name</label>
+            <section className="loginField">
+              <label htmlFor="firstname">First Name</label>
               <input
                 id="firstName"
                 type="text"
@@ -193,8 +207,8 @@ export default class LoginComponent extends Component {
           </section>
 
           <section>
-            <section className={styles.loginField}>
-              <label htmlFor="lastName">Last name</label>
+            <section className="loginField">
+              <label htmlFor="lastName">Last Name</label>
               <input
                 id="lastName"
                 type="text"
@@ -205,8 +219,8 @@ export default class LoginComponent extends Component {
             </section>
           </section>
 
-          <section className={styles.loginField}>
-            <label htmlFor="email">Email Address</label>
+          <section className="loginField">
+            <label htmlFor="email">Email</label>
             <input
               id="email"
               type="email"
@@ -216,7 +230,7 @@ export default class LoginComponent extends Component {
             />
           </section>
 
-          <section className={styles.loginField}>
+          <section className="loginField">
             <label htmlFor="password">Password</label>
             <input
               id="password"
@@ -227,7 +241,7 @@ export default class LoginComponent extends Component {
             />
           </section>
 
-          <section className={styles.loginField}>
+          <section className="loginField">
             <label htmlFor="confirmPassword">Confirm Password</label>
             <input
               id="confirmPassword"
@@ -238,20 +252,27 @@ export default class LoginComponent extends Component {
             />
           </section>
 
-          <input className={styles.submitInput} type="submit" value="Register" />
+          <input
+            className="submitInput"
+            type="submit"
+            value="Register"
+          />
         </form>
-      )
+      );
     }
 
     return (
-
-      <>
-        <section className={styles.loginOptions}>
-          <button onClick={this.onLoginClick} className={styles.loginButton}>Log In</button>
-          <button onClick={this.onRegisterClick} className={styles.loginButton}>Register</button>
+      <div className="form-container">
+        <section className="loginOptions">
+          <button onClick={this.onLoginClick} className="loginButton">
+            Log In
+          </button>
+          <button onClick={this.onRegisterClick} className="loginButton">
+            Register
+          </button>
         </section>
-
         {$form}
-      </>);
+      </div>
+    );
   }
 }
