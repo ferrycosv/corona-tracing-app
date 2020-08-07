@@ -4,6 +4,7 @@ import ListingComponent from "./Listing";
 import ContactForm from "./ContactForm";
 import styles from "./dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { formatDistance, subDays } from 'date-fns'
 import {
   faUserCircle,
   faPlusCircle,
@@ -83,6 +84,10 @@ export default class Dashboard extends Component {
     }
   };
 
+  checkContactFormToggle = () => {
+    return this.state.contactFormToggle;
+  };
+
   handleEditing = (value) => {
     this.setState({ editing: value });
   };
@@ -129,6 +134,14 @@ export default class Dashboard extends Component {
     }
   };
 
+  filterLastTen = () => {
+    /*let { contacts } = this.state;
+    const day = 24*60*60*100;
+    contacts = contacts.filter(item => Date.parse(item.contactDate) > Date.parse(Date.now()-(day*10)));
+    */
+   console.log("filter pressed");
+  };
+
   render() {
     return (
       <div className={styles.container}>
@@ -166,6 +179,7 @@ export default class Dashboard extends Component {
             <button
               className={styles.listingButtons}
               style={{ marginRight: "10px" }}
+              onClick={this.filterLastTen}
             >
               Last Ten Days
             </button>
@@ -173,6 +187,7 @@ export default class Dashboard extends Component {
             <div
               className="flex-grow-1 text-right pr-5"
               style={{ color: "#0ED199" }}
+              onClick={this.filterLastMonth}
             >
               <FontAwesomeIcon
                 onClick={this.handleAddContactForm}
@@ -206,6 +221,7 @@ export default class Dashboard extends Component {
             handleDelete={this.handleDelete}
             handleEditing={this.handleEditing}
             onContactSave={this.handleSave}
+            checkContactFormToggle={this.checkContactFormToggle}
           />
         </div>
       </div>

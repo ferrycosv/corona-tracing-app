@@ -11,6 +11,7 @@ const tableColumn = {
 export default function ListingComponent(props) {
   const [edit, setEdit] = useState(-1);
   const handleDelete = (index, e) => {
+    if (props.checkContactFormToggle()) return;
     if (edit !== -1) {
       if (
         window.confirm(
@@ -28,6 +29,7 @@ export default function ListingComponent(props) {
   };
 
   const handleEdit = (index, e) => {
+    if (props.checkContactFormToggle()) return;
     if (edit !== -1) {
       if (
         window.confirm(
