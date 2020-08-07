@@ -9,11 +9,11 @@ chrome://flags/#allow-insecure-localhost
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-var cookieParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 const config = require("./config");
 const api = require("./api/");
-var fs = require("fs");
-var https = require("https");
+const fs = require("fs");
+const https = require("https");
 
 const app = express();
 //app.use(cors());

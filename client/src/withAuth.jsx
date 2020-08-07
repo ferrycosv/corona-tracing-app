@@ -11,6 +11,10 @@ export default function withAuth(ComponentToProtect) {
         redirect: false,
       };
     }
+    delete_cookie(name) {
+      document.cookie =
+        name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    }
     async componentDidMount() {
       try {
         const res = await fetch(`${variables.URL_API}users/checkToken`, {
@@ -25,6 +29,7 @@ export default function withAuth(ComponentToProtect) {
           throw error;
         }
       } catch (err) {
+        this.delete_cookie("token");
         console.error(err);
         this.setState({ loading: false, redirect: true });
       }

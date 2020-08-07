@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import {  Route, Switch } from 'react-router-dom';
 import withAuth from './withAuth';
 import Home from './home/Home';
 //import Secret from './Secret';
 //import Login from './Login';
-import Dashboard from './dashboard/Dashboard'
+import Dashboard from './dashboard/DashBoard'
 
 //import 'antd/dist/antd.css';
 

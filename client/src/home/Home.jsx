@@ -2,15 +2,26 @@ import React, { Component } from "react";
 import "./home.css";
 import LoginComponent from "./Login";
 import StatisticsComponent from "./Statistics";
+import { Redirect } from "react-router-dom";
 
 import { ReactComponent as VirusIcon } from "./coronavirus.svg";
 
 export default class Home extends Component {
   state = {
     message: "Loading...",
+    redirect: false,
   };
+  get_cookie(name) {
+    return document.cookie.split(";").some((c) => {
+      return c.trim().startsWith(name + "=");
+    });
+  }
+  componentDidMount() {
+    if (this.get_cookie("token")) this.setState({ redirect: true });
+  }
 
   render() {
+    if (this.state.redirect) return <Redirect to="/dashboard" />;
     return (
       <div>
         <div className="container-fluid">

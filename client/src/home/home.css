@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 .root{
-    background-color: #8000CA;
+    background-color: #322741;/*#8000CA;*/
     font-family: 'Roboto', sans-serif;
 }
 /*.container{
@@ -16,7 +16,7 @@
 }*/
 
 .login-section{
-    background-color: #8000CA;
+    background-color: #322741;
 }
 
 .title-container {

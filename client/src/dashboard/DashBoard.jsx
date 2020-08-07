@@ -1,71 +1,29 @@
 import React, { Component } from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ListingComponent from "./Listing";
 import ContactForm from "./ContactForm";
 import styles from "./dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
-  faSpinner,
   faUserCircle,
-  faHome,
   faPlusCircle,
+  faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import variables from "../env_variables";
 
 const tableColumn = {
   width: "100px",
 };
-/*export default function withAuth(ComponentToProtect) {
-    return class extends Component {*/
 
 export default class Dashboard extends Component {
-  /*constructor() {
-    super();
-    this.state = {
-      /*loading: true,
-      redirect: false,*
-      contactFormToggle: false,
-      version: 0,
-    };
-  }
-
-  componentDidMount() {
-    const url = "https://localhost:5000/api/users/checkToken";
-    const data = { token: localStorage.getItem("token") };
-
-    fetch(url, {
-      method: "POST",
-      mode: "cors",
-      cache: "no-cache",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      redirect: "follow",
-      referrerPolicy: "no-referrer",
-      body: JSON.stringify(data),
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          this.setState({ loading: false });
-        } else {
-          const error = new Error(res.error);
-          throw error;
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        this.setState({ loading: false, redirect: true });
-      });
-  }*/
-
   state = {
     contacts: [],
     email: "",
     firstName: "",
     lastName: "",
     contactFormToggle: false,
+    editing: false,
+    filterActive: false,
   };
 
   async componentDidMount() {
@@ -93,32 +51,85 @@ export default class Dashboard extends Component {
   }
 
   handleAddContactForm = (event) => {
-    const { contactFormToggle } = this.state;
-    this.setState({ contactFormToggle: !contactFormToggle });
+    if (!this.state.editing) {
+      const { contactFormToggle } = this.state;
+      this.setState({ contactFormToggle: !contactFormToggle });
+    }
   };
 
-  handleDelete = (id) => {
-    const contacts = this.state.contacts.filter((x, idx) => idx !== id);
-    this.setState({ contacts: contacts });
+  handleDelete = async (index) => {
+    const contacts = this.state.contacts.filter((item, idx) => idx !== index);
+    try {
+      const res = await fetch(`${variables.URL_API}lists`, {
+        method: "PUT",
+        body: JSON.stringify({ contacts: contacts }),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (res.status === 200) {
+        this.setState({
+          contacts: contacts,
+        });
+      } else {
+        const error = new Error(data.error);
+        throw error;
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
   };
 
-  /*updateVersion = () => {
-    let version = this.state.version;
-    version++;
+  handleEditing = (value) => {
+    this.setState({ editing: value });
+  };
 
-    this.setState({
-      version: version,
-    });
-  };*/
+  delete_cookie(name) {
+    document.cookie =
+      name + "=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+  }
+
+  handleLogout = () => {
+    this.delete_cookie("token");
+  };
+  handleSave = async (item, isNew, index) => {
+    let contacts = this.state.contacts;
+    if (!isNew) {
+      contacts = contacts.filter((i, idx) => idx !== index);
+      item["lastUpdate"] = Date.now();
+    } else {
+      this.handleAddContactForm();
+    }
+    contacts.unshift(item);
+    try {
+      const res = await fetch(`${variables.URL_API}lists`, {
+        method: "PUT",
+        body: JSON.stringify({ contacts: contacts }),
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (res.status === 200) {
+        this.setState({
+          contacts: contacts,
+        });
+        this.handleEditing(false);
+      } else {
+        const error = new Error(data.error);
+        throw error;
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
+  };
 
   render() {
-    /*const { loading, redirect } = this.state;
-    if (loading) {
-      return null;
-    }
-    if (redirect) {
-      return <Redirect to="/" />;
-    }*/
     return (
       <div className={styles.container}>
         <div className={[styles.leftSideBar, styles.center].join(" ")}>
@@ -133,11 +144,13 @@ export default class Dashboard extends Component {
             </span>
             <br></br>
             <span>
-              <FontAwesomeIcon icon={faHome} size="1x" />
+              <FontAwesomeIcon icon={faSignOutAlt} size="1x" />
             </span>
             &nbsp;&nbsp;&nbsp;
             <span>
-              <Link to="/">Home</Link>
+              <Link to="/" onClick={this.handleLogout}>
+                Logout
+              </Link>
             </span>
           </div>
         </div>
@@ -150,13 +163,13 @@ export default class Dashboard extends Component {
             </span>
           </div>
           <div className="mt-2 w-100">
-            <div
+            <button
               className={styles.listingButtons}
               style={{ marginRight: "10px" }}
             >
               Last Ten Days
-            </div>
-            <div className={styles.listingButtons}>Last Month</div>
+            </button>
+            <button className={styles.listingButtons}>Last Month</button>
             <div
               className="flex-grow-1 text-right pr-5"
               style={{ color: "#0ED199" }}
@@ -177,20 +190,22 @@ export default class Dashboard extends Component {
                 height: "24px",
               }}
             >
-              <div style={tableColumn}>name</div>
-              <div style={tableColumn}>date</div>
-              <div style={tableColumn}>location</div>
-              <div style={tableColumn}>corona status</div>
+              <div style={tableColumn}>Name</div>
+              <div style={tableColumn}>Date</div>
+              <div style={tableColumn}>Location</div>
+              <div style={tableColumn}>Status</div>
               <div style={tableColumn}></div>
             </div>
           </div>
 
           {this.state.contactFormToggle && (
-            <ContactForm onContactSubmitted={this.updateVersion} />
+            <ContactForm onContactSave={this.handleSave} new={true} />
           )}
           <ListingComponent
             contacts={this.state.contacts}
             handleDelete={this.handleDelete}
+            handleEditing={this.handleEditing}
+            onContactSave={this.handleSave}
           />
         </div>
       </div>
