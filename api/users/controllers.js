@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const secret = "mysecretsshhh"; //read from file
 const bcrypt = require("bcrypt");
+const path = require("path");
+const fs = require("fs");
 
 const saltRounds = 10;
+const secret = fs.readFileSync(path.resolve(__dirname, "../../secret.key"));
 
 const controllers = {
   register: (req, res) => {
@@ -57,7 +59,7 @@ const controllers = {
               expiresIn: "1h",
             });
             res
-              .cookie("token", token, { httpOnly: true })
+              .cookie("token", token)
               .status(200)
               .json({ status: "success", token: token });
           }

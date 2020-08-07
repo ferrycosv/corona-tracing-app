@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { floppy, faBookmark } from "@fortawesome/free-solid-svg-icons";
-import { Switch } from "antd";
-
 const tableColumn = {
   width: "100px",
 };
@@ -20,26 +16,23 @@ const buttonStyle = {
 };
 export default function ContactForm(props) {
   const [contactForm, setContactForm] = useState({
-    contactForm: {
-      fullName: "",
-      contactDate: "",
-      contactPlace: "",
-      status: false,
-    },
+    fullName: "",
+    contactDate: "",
+    contactPlace: "",
+    status: "not infected",
   });
   useEffect(() => {
-    if (props.edit) setContactForm(props.edit);
+    if (props.edit) setContactForm({ ...contactForm, ...props.edit });
   }, []);
 
   const handleInputChange = (event) => {
     const { value, name } = event.target;
-    setContactForm({
-      contactForm: { ...contactForm, [name]: value },
-    });
+    setContactForm({ ...contactForm, [name]: value });
   };
 
   const handleSaveClick = (event) => {
-
+    if(!props.new) props.setEdit(-1);
+    props.onContactSave(contactForm, props.new, props.idx);
   };
 
   return (
@@ -81,10 +74,14 @@ export default function ContactForm(props) {
         />
       </div>
       <div style={tableColumn}>
-      <select value={contactForm.status} onChange={handleInputChange}>
-            <option value="not infected">Not infected</option>
-            <option value="infected">Infected</option>
-          </select>
+        <select
+          name="status"
+          value={contactForm.status}
+          onChange={handleInputChange}
+        >
+          <option value="not infected">Not infected</option>
+          <option value="infected">Infected</option>
+        </select>
       </div>
       <div style={tableColumn}>
         <button style={buttonStyle} onClick={handleSaveClick}>
