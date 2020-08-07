@@ -1,5 +1,5 @@
 {
-  "name": "cooool",
+  "name": "corona-tracing-app",
   "version": "1.0.0",
   "scripts": {
     "dev": "concurrently \"npm run dev-api\" \"npm run dev-client\"",
