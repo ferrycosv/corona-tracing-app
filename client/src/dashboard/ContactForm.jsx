@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { parse, getDate, getMonth, getYear } from 'date-fns'
 
 const tableColumn = {
   width: "100px",
@@ -17,7 +18,7 @@ const buttonStyle = {
 export default function ContactForm(props) {
   const [contactForm, setContactForm] = useState({
     fullName: "",
-    contactDate: "",
+    contactDate: `${getYear(new Date())}-${(getMonth(new Date())+1).toString().padStart(2, '0')}-${getDate(new Date()).toString().padStart(2, '0')}`,
     contactPlace: "",
     status: "not infected",
   });
@@ -31,7 +32,8 @@ export default function ContactForm(props) {
   };
 
   const handleSaveClick = (event) => {
-    if(!props.new) props.setEdit(-1);
+    event.preventDefault();
+    if (!props.new) props.setEdit(-1);
     props.onContactSave(contactForm, props.new, props.idx);
   };
 
@@ -40,54 +42,58 @@ export default function ContactForm(props) {
       className="d-flex flex-row w-100 justify-content-between p-3 align-items-center mt-4"
       style={{ color: "#DFDFDF", height: "24px" }}
     >
-      <div style={tableColumn}>
-        <input
-          style={inputStyle}
-          id="fullName"
-          type="text"
-          name="fullName"
-          onChange={handleInputChange}
-          required
-          value={contactForm.fullName}
-        />
-      </div>
-      <div style={tableColumn}>
-        <input
-          style={inputStyle}
-          id="contactDate"
-          type="date"
-          name="contactDate"
-          onChange={handleInputChange}
-          required
-          value={contactForm.contactDate}
-        />
-      </div>
-      <div style={tableColumn}>
-        <input
-          style={inputStyle}
-          id="contactPlace"
-          type="text"
-          name="contactPlace"
-          onChange={handleInputChange}
-          required
-          value={contactForm.contactPlace}
-        />
-      </div>
-      <div style={tableColumn}>
-        <select
-          name="status"
-          value={contactForm.status}
-          onChange={handleInputChange}
-        >
-          <option value="not infected">Not infected</option>
-          <option value="infected">Infected</option>
-        </select>
-      </div>
-      <div style={tableColumn}>
-        <button style={buttonStyle} onClick={handleSaveClick}>
-          Save
-        </button>
-      </div>
+      <form
+        onSubmit={handleSaveClick}
+        className="d-flex flex-row w-100 justify-content-between align-items-center"
+      >
+        <div style={tableColumn}>
+          <input
+            style={inputStyle}
+            id="fullName"
+            type="text"
+            name="fullName"
+            onChange={handleInputChange}
+            required
+            value={contactForm.fullName}
+          />
+        </div>
+        <div style={tableColumn}>
+          <input
+            style={inputStyle}
+            id="contactDate"
+            type="date"
+            name="contactDate"
+            onChange={handleInputChange}
+            required
+            value={contactForm.contactDate}
+            max={`${getYear(new Date())}-${(getMonth(new Date())+1).toString().padStart(2, '0')}-${getDate(new Date()).toString().padStart(2, '0')}`}
+          />
+        </div>
+        <div style={tableColumn}>
+          <input
+            style={inputStyle}
+            id="contactPlace"
+            type="text"
+            name="contactPlace"
+            onChange={handleInputChange}
+            required
+            value={contactForm.contactPlace}
+          />
+        </div>
+        <div style={tableColumn}>
+          <select
+            name="status"
+            value={contactForm.status}
+            onChange={handleInputChange}
+          >
+            <option value="not infected">Not infected</option>
+            <option value="infected">Infected</option>
+          </select>
+        </div>
+        <div style={tableColumn}>
+          <input type="submit" style={buttonStyle} value="Save" />
+        </div>
+      </form>
     </div>
   );
 }
