@@ -56,10 +56,21 @@
 
 .listingButtons {
     font-size: 14px;
-    color: #FFFFFF;
+    color: #ffffff;
     width: 120px;
     text-align: center;
-    background-color: #52416A;    
+    background-color: #678CA2;    
+    padding: 5px;
+    border-radius: 3px;
+    height: 30px;
+}
+
+.listingButtonsActive {
+    font-size: 14px;
+    color: #ffffff;
+    width: 120px;
+    text-align: center;
+    background-color: #659B5E;    
     padding: 5px;
     border-radius: 3px;
     height: 30px;
@@ -68,3 +79,23 @@
 .buttonHeader{
     height: 5%;
 }
+
+.addButton{
+    color: #678CA2;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+}
+
+.addButton:hover {
+    color: #659B5E;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+  }
+
+  .contactIcon{
+    color: #659B5E;    
+  }

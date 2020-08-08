@@ -51,28 +51,30 @@ export default function ListingComponent(props) {
         <div style={tableColumn}>{props_.item.contactDate}</div>
         <div style={tableColumn}>{props_.item.contactPlace}</div>
         <div style={tableColumn}>{props_.item.status}</div>
-        <div style={tableColumn}>
-          <span
-            onClick={(e) => handleDelete(props_.idx)}
-            style={{
-              color: "red",
-              marginRight: "10px",
-              cursor: "pointer",
-            }}
-          >
-            <FontAwesomeIcon icon={faTrash} size="1x" />
-          </span>
-          <span
-            onClick={(e) => handleEdit(props_.idx)}
-            style={{
-              color: "white",
-              marginRight: "10px",
-              cursor: "pointer",
-            }}
-          >
-            <FontAwesomeIcon icon={faEdit} size="1x" />
-          </span>
-        </div>
+        {!props_.filter() && (
+          <div style={tableColumn}>
+            <span
+              onClick={(e) => handleDelete(props_.idx)}
+              style={{
+                color: "red",
+                marginRight: "10px",
+                cursor: "pointer",
+              }}
+            >
+              <FontAwesomeIcon icon={faTrash} size="1x" />
+            </span>
+            <span
+              onClick={(e) => handleEdit(props_.idx)}
+              style={{
+                color: "white",
+                marginRight: "10px",
+                cursor: "pointer",
+              }}
+            >
+              <FontAwesomeIcon icon={faEdit} size="1x" />
+            </span>
+          </div>
+        )}
       </div>
     );
   };
@@ -95,7 +97,7 @@ export default function ListingComponent(props) {
                 idx={idx}
                 setEdit={setEdit}
               />
-            )) || <ListItem item={item} idx={idx} />}
+            )) || <ListItem item={item} idx={idx} filter={props.checkFilterActive} />}
           </div>
         );
       })}
