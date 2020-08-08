@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { parse, getDate, getMonth, getYear } from 'date-fns'
+import { getDate, getMonth, getYear } from 'date-fns'
 
 const tableColumn = {
   width: "100px",
@@ -10,10 +10,11 @@ const inputStyle = {
   borderRadius: "15px",
 };
 const buttonStyle = {
-  background: "#4C64E3",
+  background: "#659B5E",
   border: "1px solid #5248C6",
   borderRadius: "15px",
   padding: "2px 10px ",
+  color: "#ffffff"
 };
 export default function ContactForm(props) {
   const [contactForm, setContactForm] = useState({

@@ -18,11 +18,11 @@
 .loginButton {
     background-color: transparent;
     border: none;
-    color: #cccccc;
+    color: #ffffff;
 }
 
 .loginButton:hover {
-    background-color: rgb(57, 107, 243);
+    background-color: #659B5E;
 }
 
 .loginField label {
@@ -48,7 +48,7 @@
 }
 
 .submitInput {
-    background-color: rgb(57, 107, 243);
+    background-color: #659B5E;
     border-radius: 1em;
     color: white;
     height: 3em;

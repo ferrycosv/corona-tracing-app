@@ -101,13 +101,6 @@ export default class LoginComponent extends Component {
       console.error(err);
       alert(err.message);
     }
-    /*.catch((err) => {
-        console.error(err);
-        alert("Error while trying to register, please try again");
-      })
-      .then((res) => {
-        this.setState({ isRegisterSubmitted: true });
-      });*/
   };
 
   onLoginClick = (event) => {
@@ -129,35 +122,6 @@ export default class LoginComponent extends Component {
     if (redirect) {
       return <Redirect to="/dashboard" />;
     }
-    /*const { isRegisterSubmitted } = this.state;
-    if (isRegisterSubmitted) {
-      //const renderLogin = (event) => {
-      event.preventDefault();
-      this.setState({
-        form: "login",
-        login: { ...this.state.login, email: this.state.register.email },
-        register: {
-          email: "",
-          password: "",
-          firstName: "",
-          lastName: "",
-          confirmPassword: "",
-        },
-        isRegisterSubmitted: false,
-      });
-    }
-    /*
-      return (
-        <section>
-          <p>
-            Registration completed successfully. <br />
-            <a href="#" onClick={renderLogin}>
-              Log in
-            </a>
-          </p>
-        </section>
-      );
-    }*/
 
     let $form = (
       <form onSubmit={this.handleLoginSubmitClick}>
