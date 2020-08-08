@@ -4,6 +4,7 @@ import ListingComponent from "./Listing";
 import ContactForm from "./ContactForm";
 import styles from "./dashboard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { parse, subDays, subMonths } from "date-fns";
 import {
   faUserCircle,
   faPlusCircle,
@@ -24,6 +25,7 @@ export default class Dashboard extends Component {
     contactFormToggle: false,
     editing: false,
     filterActive: false,
+    filter: "",
   };
 
   async componentDidMount() {
@@ -39,6 +41,10 @@ export default class Dashboard extends Component {
           contacts: data.contacts,
           firstName: data.firstName,
           lastName: data.lastName,
+          contactFormToggle: false,
+          editing: false,
+          filterActive: false,
+          filter: "",
         });
       } else {
         const error = new Error(data.error);
@@ -51,10 +57,9 @@ export default class Dashboard extends Component {
   }
 
   handleAddContactForm = (event) => {
-    if (!this.state.editing) {
-      const { contactFormToggle } = this.state;
-      this.setState({ contactFormToggle: !contactFormToggle });
-    }
+    if (this.state.editing || this.state.filterActive) return;
+    const { contactFormToggle } = this.state;
+    this.setState({ contactFormToggle: !contactFormToggle });
   };
 
   handleDelete = async (index) => {
@@ -81,6 +86,10 @@ export default class Dashboard extends Component {
       console.error(err);
       alert(err.message);
     }
+  };
+
+  checkContactFormToggle = () => {
+    return this.state.contactFormToggle;
   };
 
   handleEditing = (value) => {
@@ -129,12 +138,58 @@ export default class Dashboard extends Component {
     }
   };
 
+  filterLastTen = () => {
+    let { contacts, filterActive, editing, filter } = this.state;
+    if (editing) return;
+    if (filterActive) {
+      this.componentDidMount();
+      return;
+    }
+    contacts = contacts.filter(
+      (item) =>
+        parse(item.contactDate.split("T")[0], "yyyy-MM-dd", new Date()) >
+        subDays(new Date(), 10)
+    );
+    filterActive = true;
+    filter = "lastTen";
+    this.setState({
+      contacts: contacts,
+      filterActive: filterActive,
+      filter: filter,
+    });
+  };
+
+  filterLastMonth = () => {
+    let { contacts, filterActive, editing, filter } = this.state;
+    if (editing) return;
+    if (filterActive) {
+      this.componentDidMount();
+      return;
+    }
+    contacts = contacts.filter(
+      (item) =>
+        parse(item.contactDate.split("T")[0], "yyyy-MM-dd", new Date()) >
+        subMonths(new Date(), 1)
+    );
+    filterActive = true;
+    filter = "lastMonth";
+    this.setState({
+      contacts: contacts,
+      filterActive: filterActive,
+      filter: filter,
+    });
+  };
+
+  checkFilterActive = () => {
+    return this.state.filterActive;
+  };
+
   render() {
     return (
       <div className={styles.container}>
         <div className={[styles.leftSideBar, styles.center].join(" ")}>
           <div className="text-center text-light mb-3">
-            <FontAwesomeIcon icon={faUserCircle} size="6x" />
+            <FontAwesomeIcon icon={faUserCircle} size="6x" className={styles.contactIcon}/>
           </div>
           <div className={styles.leftlinks}>
             <span>Welcome</span>
@@ -144,7 +199,7 @@ export default class Dashboard extends Component {
             </span>
             <br></br>
             <span>
-              <FontAwesomeIcon icon={faSignOutAlt} size="1x" />
+              <FontAwesomeIcon icon={faSignOutAlt} size="1x"/>
             </span>
             &nbsp;&nbsp;&nbsp;
             <span>
@@ -164,20 +219,34 @@ export default class Dashboard extends Component {
           </div>
           <div className="mt-2 w-100">
             <button
-              className={styles.listingButtons}
+              className={
+                (this.state.filter === "lastTen" &&
+                  styles.listingButtonsActive) ||
+                styles.listingButtons
+              }
               style={{ marginRight: "10px" }}
+              onClick={this.filterLastTen}
             >
               Last Ten Days
             </button>
-            <button className={styles.listingButtons}>Last Month</button>
+            <button
+              className={
+                (this.state.filter === "lastMonth" &&
+                  styles.listingButtonsActive) ||
+                styles.listingButtons
+              }
+              onClick={this.filterLastMonth}
+            >
+              Last Month
+            </button>
             <div
               className="flex-grow-1 text-right pr-5"
-              style={{ color: "#0ED199" }}
             >
               <FontAwesomeIcon
                 onClick={this.handleAddContactForm}
                 icon={faPlusCircle}
                 size="3x"
+                className={styles.addButton}
               />
             </div>
           </div>
@@ -194,7 +263,7 @@ export default class Dashboard extends Component {
               <div style={tableColumn}>Date</div>
               <div style={tableColumn}>Location</div>
               <div style={tableColumn}>Status</div>
-              <div style={tableColumn}></div>
+              {!this.state.filterActive && <div style={tableColumn}></div>}
             </div>
           </div>
 
@@ -206,6 +275,8 @@ export default class Dashboard extends Component {
             handleDelete={this.handleDelete}
             handleEditing={this.handleEditing}
             onContactSave={this.handleSave}
+            checkContactFormToggle={this.checkContactFormToggle}
+            checkFilterActive={this.checkFilterActive}
           />
         </div>
       </div>
