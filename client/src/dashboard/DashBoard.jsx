@@ -148,7 +148,7 @@ export default class Dashboard extends Component {
     contacts = contacts.filter(
       (item) =>
         parse(item.contactDate.split("T")[0], "yyyy-MM-dd", new Date()) >
-        subDays(new Date(), 10)
+        subDays(new Date(), 14)
     );
     filterActive = true;
     filter = "lastTen";
@@ -227,7 +227,7 @@ export default class Dashboard extends Component {
               style={{ marginRight: "10px" }}
               onClick={this.filterLastTen}
             >
-              Last Ten Days
+              Last 14 Days
             </button>
             <button
               className={
