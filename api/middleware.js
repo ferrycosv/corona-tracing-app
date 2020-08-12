@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
-const secret = 'mysecretsshhh';
+const fs = require("fs");
+const path = require("path");
+const secret = fs.readFileSync(path.resolve(__dirname, "../secret.key"));
 
 const withAuth = function(req, res, next) {
   const token = 
