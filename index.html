@@ -39,14 +39,17 @@
       </div>
     </section>
     <section class="showcase-link">
-      <form target="blank" action="https://corona-tracing-app.herokuapp.com/">
-        <button class="btn1" type="submit">
-          Create your account here 
-        </button>
-      </form>
+      <button class="btn1" id="redirect">
+        Create your account here
+      </button>
     </section>
     <footer>
-        <p> Corona tracing app Copyright &copy; 2020</p>
+      <p>Corona tracing app Copyright &copy; 2020</p>
     </footer>
+    <script type="text/javascript">
+      document.getElementById("redirect").onclick = function () {
+        location.href = "https://corona-tracing-app.herokuapp.com/";
+      };
+    </script>
   </body>
 </html>
