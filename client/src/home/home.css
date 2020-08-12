@@ -1,44 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
-/*body{
-    background-color: #322741;/*#8000CA;*
-    font-family: 'Roboto', sans-serif;
-}
-.container{
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-.border{
-    border: 1px solid #bbbbbb;
-}*/
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap");
 
-.login-section{
-    background-color: #322741;
+.login-section {
+  background-color: #322741;
 }
 
-.statistics-section{
-    background-color: #E7E5DF;
+.statistics-section {
+  background-color: #e7e5df;
 }
 
 .title-container {
-    /*display: flex;
-    justify-content: center;
-    align-items: center;*/
-    color: white;
-    font-size: 1em;
+  color: white;
+  font-size: 1em;
 }
 
 .title-container h2 {
-    font-size: 1.5em;
+  font-size: 1.5em;
 }
 
 .virus-icon {
-    max-width: 350px;
-    min-width: 150px;
-    width: 100%;
-    height: auto;
-    padding: 1em;
+  max-width: 350px;
+  min-width: 150px;
+  width: 100%;
+  height: auto;
+  padding: 1em;
 }

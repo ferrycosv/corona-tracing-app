@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 import ListingComponent from "./Listing";
 import ContactForm from "./ContactForm";
@@ -11,10 +12,6 @@ import {
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import variables from "../env_variables";
-
-const tableColumn = {
-  width: "100px",
-};
 
 export default class Dashboard extends Component {
   state = {
@@ -104,6 +101,7 @@ export default class Dashboard extends Component {
   handleLogout = () => {
     this.delete_cookie("token");
   };
+
   handleSave = async (item, isNew, index) => {
     let contacts = this.state.contacts;
     if (!isNew) {
@@ -186,12 +184,20 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <div className={styles.container}>
-        <div className={[styles.leftSideBar, styles.center].join(" ")}>
-          <div className="text-center text-light mb-3">
-            <FontAwesomeIcon icon={faUserCircle} size="6x" className={styles.contactIcon}/>
-          </div>
-          <div className={styles.leftlinks}>
+      <div className="container-fluid">
+        <Helmet>
+          <style>
+            {"body { height: 100%; background-color: #322741; color: #ffffff }"}
+          </style>
+        </Helmet>
+        <div className="row">
+          <div className="col-md-12 col-lg-3 mt-4 text-center">
+            <FontAwesomeIcon
+              icon={faUserCircle}
+              size="6x"
+              className={styles.contactIcon}
+            />
+            <br></br>
             <span>Welcome</span>
             <br></br>
             <span>
@@ -199,7 +205,7 @@ export default class Dashboard extends Component {
             </span>
             <br></br>
             <span>
-              <FontAwesomeIcon icon={faSignOutAlt} size="1x"/>
+              <FontAwesomeIcon icon={faSignOutAlt} size="1x" />
             </span>
             &nbsp;&nbsp;&nbsp;
             <span>
@@ -208,76 +214,89 @@ export default class Dashboard extends Component {
               </Link>
             </span>
           </div>
-        </div>
-        <div className={styles.rightSideBar}>
-          <div className="mt-5">
-            <span
-              style={{ fontSize: "16px", color: "#FFFFFF", fontWeight: 600 }}
-            >
-              Contact List
-            </span>
-          </div>
-          <div className="mt-2 w-100">
-            <button
-              className={
-                (this.state.filter === "lastTen" &&
-                  styles.listingButtonsActive) ||
-                styles.listingButtons
-              }
-              style={{ marginRight: "10px" }}
-              onClick={this.filterLastTen}
-            >
-              Last 14 Days
-            </button>
-            <button
-              className={
-                (this.state.filter === "lastMonth" &&
-                  styles.listingButtonsActive) ||
-                styles.listingButtons
-              }
-              onClick={this.filterLastMonth}
-            >
-              Last Month
-            </button>
-            <div
-              className="flex-grow-1 text-right pr-5"
-            >
-              <FontAwesomeIcon
-                onClick={this.handleAddContactForm}
-                icon={faPlusCircle}
-                size="3x"
-                className={styles.addButton}
-              />
-            </div>
-          </div>
-          <div className="w-100">
-            <div
-              className="d-flex flex-row w-100 justify-content-between p-3 align-items-center mt-4"
-              style={{
-                backgroundColor: "#2E2439",
-                color: "#DFDFDF",
-                height: "24px",
-              }}
-            >
-              <div style={tableColumn}>Name</div>
-              <div style={tableColumn}>Date</div>
-              <div style={tableColumn}>Location</div>
-              <div style={tableColumn}>Status</div>
-              {!this.state.filterActive && <div style={tableColumn}></div>}
-            </div>
-          </div>
 
-          {this.state.contactFormToggle && (
-            <ContactForm onContactSave={this.handleSave} new={true} />
-          )}
-          <ListingComponent
-            contacts={this.state.contacts}
-            handleDelete={this.handleDelete}
-            handleEditing={this.handleEditing}
-            onContactSave={this.handleSave}
-            checkContactFormToggle={this.checkContactFormToggle}
-            checkFilterActive={this.checkFilterActive}
-          />
+          <div className="col-md-12 col-lg-9 mt-4">
+            <div className="container-fluid">
+              <div className="row h-100">
+                <div className="col-12">
+                  <h1
+                    style={{
+                      color: "#FFFFFF",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Contact List
+                  </h1>
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-12 col-sm-3 col-lg-2 pt-2">
+                  <button
+                    className={
+                      (this.state.filter === "lastTen" &&
+                        styles.listingButtonsActive) ||
+                      styles.listingButtons
+                    }
+                    onClick={this.filterLastTen}
+                  >
+                    Last 14 Days
+                  </button>
+                </div>
+                <div className="col-12 col-sm-3 col-lg-2 pt-2">
+                  <button
+                    className={
+                      (this.state.filter === "lastMonth" &&
+                        styles.listingButtonsActive) ||
+                      styles.listingButtons
+                    }
+                    onClick={this.filterLastMonth}
+                  >
+                    Last Month
+                  </button>
+                </div>
+                <div className="col-12 col-sm-6 col-lg-8 text-center text-sm-left pt-2">
+                  <FontAwesomeIcon
+                    onClick={this.handleAddContactForm}
+                    icon={faPlusCircle}
+                    size="3x"
+                    className={styles.addButton}
+                  />
+                </div>
+              </div>
+              <div className="row pt-3 pb-3">
+                <div className="col-12">
+                  <form id="contact_form"></form>
+                  <table className="table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Status</th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.state.contactFormToggle && (
+                        <ContactForm
+                          onContactSave={this.handleSave}
+                          new={true}
+                        />
+                      )}
+                      <ListingComponent
+                        contacts={this.state.contacts}
+                        handleDelete={this.handleDelete}
+                        handleEditing={this.handleEditing}
+                        onContactSave={this.handleSave}
+                        checkContactFormToggle={this.checkContactFormToggle}
+                        checkFilterActive={this.checkFilterActive}
+                      />
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

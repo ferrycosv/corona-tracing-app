@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { getDate, getMonth, getYear } from 'date-fns'
+import { getDate, getMonth, getYear } from "date-fns";
 
-const tableColumn = {
-  width: "100px",
-};
 const inputStyle = {
   background: "#FFFFFF",
   border: "1px solid #CCCCCC",
-  borderRadius: "15px",
+  borderRadius: "5px",
+  width: "100%",
 };
 const buttonStyle = {
   background: "#659B5E",
   border: "1px solid #5248C6",
-  borderRadius: "15px",
-  padding: "2px 10px ",
-  color: "#ffffff"
+  borderRadius: "5px",
+  color: "#ffffff",
+  width: "100%",
 };
 export default function ContactForm(props) {
   const [contactForm, setContactForm] = useState({
     fullName: "",
-    contactDate: `${getYear(new Date())}-${(getMonth(new Date())+1).toString().padStart(2, '0')}-${getDate(new Date()).toString().padStart(2, '0')}`,
+    contactDate: `${getYear(new Date())}-${(getMonth(new Date()) + 1)
+      .toString()
+      .padStart(2, "0")}-${getDate(new Date()).toString().padStart(2, "0")}`,
     contactPlace: "",
     status: "not infected",
   });
@@ -33,21 +33,17 @@ export default function ContactForm(props) {
   };
 
   const handleSaveClick = (event) => {
-    event.preventDefault();
-    if (!props.new) props.setEdit(-1);
-    props.onContactSave(contactForm, props.new, props.idx);
+    const form = document.getElementById("contact_form");
+    if (form.reportValidity()) {
+      if (!props.new) props.setEdit(-1);
+      props.onContactSave(contactForm, props.new, props.idx);
+    }
   };
 
   return (
-    <div
-      className="d-flex flex-row w-100 justify-content-between p-3 align-items-center mt-4"
-      style={{ color: "#DFDFDF", height: "24px" }}
-    >
-      <form
-        onSubmit={handleSaveClick}
-        className="d-flex flex-row w-100 justify-content-between align-items-center"
-      >
-        <div style={tableColumn}>
+    <>
+      <tr>
+        <td data-label="Name">
           <input
             style={inputStyle}
             id="fullName"
@@ -56,9 +52,10 @@ export default function ContactForm(props) {
             onChange={handleInputChange}
             required
             value={contactForm.fullName}
+            form="contact_form"
           />
-        </div>
-        <div style={tableColumn}>
+        </td>
+        <td data-label="Date" className="justify-content-center">
           <input
             style={inputStyle}
             id="contactDate"
@@ -67,10 +64,15 @@ export default function ContactForm(props) {
             onChange={handleInputChange}
             required
             value={contactForm.contactDate}
-            max={`${getYear(new Date())}-${(getMonth(new Date())+1).toString().padStart(2, '0')}-${getDate(new Date()).toString().padStart(2, '0')}`}
+            max={`${getYear(new Date())}-${(getMonth(new Date()) + 1)
+              .toString()
+              .padStart(2, "0")}-${getDate(new Date())
+              .toString()
+              .padStart(2, "0")}`}
+            form="contact_form"
           />
-        </div>
-        <div style={tableColumn}>
+        </td>
+        <td data-label="Location">
           <input
             style={inputStyle}
             id="contactPlace"
@@ -79,22 +81,30 @@ export default function ContactForm(props) {
             onChange={handleInputChange}
             required
             value={contactForm.contactPlace}
+            form="contact_form"
           />
-        </div>
-        <div style={tableColumn}>
+        </td>
+        <td data-label="Status">
           <select
             name="status"
             value={contactForm.status}
             onChange={handleInputChange}
+            form="contact_form"
           >
             <option value="not infected">Not infected</option>
             <option value="infected">Infected</option>
           </select>
-        </div>
-        <div style={tableColumn}>
-          <input type="submit" style={buttonStyle} value="Save" />
-        </div>
-      </form>
-    </div>
+        </td>
+        <td data-label="">
+          <button
+            style={buttonStyle}
+            form="contact_form"
+            onClick={handleSaveClick}
+          >
+            Save
+          </button>
+        </td>
+      </tr>
+    </>
   );
 }
