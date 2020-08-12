@@ -218,15 +218,14 @@ export default class Dashboard extends Component {
           <div className="col-md-12 col-lg-9 mt-4">
             <div className="container-fluid">
               <div className="row h-100">
-                <div className="col-12">
-                  <h1
+                <div className="col-12 text-center text-sm-left">
+                  <h2
                     style={{
                       color: "#FFFFFF",
-                      fontWeight: 600,
                     }}
                   >
-                    Contact List
-                  </h1>
+                    Contacts List
+                  </h2>
                 </div>
               </div>
               <div className="row">
