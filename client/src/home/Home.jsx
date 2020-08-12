@@ -46,7 +46,7 @@ export default class Home extends Component {
               <LoginComponent />
             </div>
           </div>
-          <div className="row statistics-section">
+          <div className="row statistics-section pb-4">
             <StatisticsComponent />
           </div>
         </div>

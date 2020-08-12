@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ContactForm from "./ContactForm";
-
-const tableColumn = {
-  width: "100px",
-};
+import ListItem from "./ListItem";
 
 export default function ListingComponent(props) {
   const [edit, setEdit] = useState(-1);
@@ -44,61 +38,34 @@ export default function ListingComponent(props) {
     setEdit(index);
     props.handleEditing(true);
   };
-  const ListItem = (props_) => {
-    return (
-      <div className="d-flex flex-row w-100 justify-content-between p-3 align-items-center mt-4">
-        <div style={tableColumn}>{props_.item.fullName}</div>
-        <div style={tableColumn}>{props_.item.contactDate}</div>
-        <div style={tableColumn}>{props_.item.contactPlace}</div>
-        <div style={tableColumn}>{props_.item.status}</div>
-        {!props_.filter() && (
-          <div style={tableColumn}>
-            <span
-              onClick={(e) => handleDelete(props_.idx)}
-              style={{
-                color: "red",
-                marginRight: "10px",
-                cursor: "pointer",
-              }}
-            >
-              <FontAwesomeIcon icon={faTrash} size="1x" />
-            </span>
-            <span
-              onClick={(e) => handleEdit(props_.idx)}
-              style={{
-                color: "white",
-                marginRight: "10px",
-                cursor: "pointer",
-              }}
-            >
-              <FontAwesomeIcon icon={faEdit} size="1x" />
-            </span>
-          </div>
-        )}
-      </div>
-    );
-  };
 
   return (
     <>
       {props.contacts.map((item, idx) => {
         item.contactDate = item.contactDate.split("T")[0];
         return (
-          <div
-            key={idx}
-            className="d-flex flex-row w-100 justify-content-between align-items-center mt-4"
-            style={{ color: "#DFDFDF", height: "24px" }}
-          >
-            {(edit === idx && (
+          <>
+            {edit === idx && (
               <ContactForm
                 edit={item}
                 new={false}
                 onContactSave={props.onContactSave}
                 idx={idx}
                 setEdit={setEdit}
+                key={idx}
               />
-            )) || <ListItem item={item} idx={idx} filter={props.checkFilterActive} />}
-          </div>
+            )}
+            {edit !== idx && (
+              <ListItem
+                item={item}
+                idx={idx}
+                filter={props.checkFilterActive}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                key={idx}
+              />
+            )}
+          </>
         );
       })}
     </>
