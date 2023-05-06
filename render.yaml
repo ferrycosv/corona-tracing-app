@@ -1,0 +1,32 @@
+services:
+  - type: web
+    plan: free
+    name: corona-tracing
+    region: frankfurt
+    env: node
+    buildCommand: npm ci --include dev; npm run build; npm prune --omit dev
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        value: mongodb+srv://<username>:<password>@<cluster>.mongodb.net/<database>?retryWrites=true&w=majority
+      - key: LOG_LEVEL
+        value: info
+      - key: NODE_ENV
+        value: production
+
+  - type: mongodb
+    plan: free
+    name: corona-tracing-mongodb
+    region: frankfurt
+    version: 4.4
+
+databases:
+  - name: corona-tracing-mongodb
+    type: mongodb
+    region: frankfurt
+    version: 4.4
+    plan: free
+    diskSizeGB: 1
+    allowAccess: true
+    ipAllowList: [] # only allow internal connections
